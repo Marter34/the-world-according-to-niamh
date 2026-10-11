@@ -1,0 +1,932 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#537c5b">
+  <title>The World According To Niamh</title>
+  <style>
+    :root {
+      --green: #537c5b;
+      --green-dark: #35583b;
+      --green-light: #eaf0e6;
+      --background: #f9faf6;
+      --white: #ffffff;
+      --text: #29372c;
+      --muted: #68776a;
+      --border: #dce6d9;
+      --danger: #a23d3d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.6;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      background: var(--green);
+      color: white;
+      cursor: pointer;
+      font-weight: 650;
+    }
+
+    button:hover { background: var(--green-dark); }
+    button.secondary { background: var(--green-light); color: var(--green-dark); }
+    button.danger { background: var(--danger); }
+
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .header-inner, main, footer {
+      width: min(1080px, 92%);
+      margin: auto;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--green-dark);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--green);
+      color: white;
+      font-size: 22px;
+    }
+
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    nav a {
+      color: var(--green-dark);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 9px;
+      font-weight: 650;
+    }
+
+    nav a:hover, nav a.active { background: var(--green-light); }
+
+    main { min-height: 75vh; padding: 34px 0 60px; }
+    .page[hidden] { display: none; }
+
+    .hero {
+      padding: clamp(24px, 6vw, 56px);
+      background: var(--green-light);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--green);
+      font-weight: 800;
+      font-size: .8rem;
+    }
+
+    h1, h2, h3 { line-height: 1.2; color: var(--green-dark); }
+    h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin: 8px 0 14px; }
+    h2 { margin-top: 0; }
+    .muted { color: var(--muted); }
+    .section-heading { margin: 30px 0 16px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .embed, .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px #263b2910;
+    }
+
+    .embed {
+      border-top: 5px solid var(--green);
+      padding: 22px;
+    }
+
+    .embed-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      background: var(--green-light);
+      border-radius: 13px;
+      font-size: 24px;
+      margin-bottom: 14px;
+    }
+
+    .embed img {
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 11px;
+      margin: 12px 0;
+    }
+
+    .embed-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+    .embed-links a {
+      color: var(--green-dark);
+      background: var(--green-light);
+      border-radius: 8px;
+      padding: 7px 10px;
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    .embed-footer {
+      border-top: 1px solid var(--border);
+      margin-top: 18px;
+      padding-top: 12px;
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    .panel { padding: 24px; margin-bottom: 22px; }
+    .stack { display: grid; gap: 14px; }
+
+    label { display: block; font-weight: 700; color: var(--green-dark); }
+
+    input, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      margin-top: 5px;
+      border: 1px solid #cbd8c9;
+      border-radius: 9px;
+      background: white;
+      color: var(--text);
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+    input[type="checkbox"] { width: auto; margin-right: 8px; }
+    input[type="color"] { height: 46px; padding: 4px; }
+    .check { display: flex; align-items: center; gap: 5px; }
+    .check label { font-weight: 500; }
+    .actions { display: flex; gap: 9px; flex-wrap: wrap; }
+
+    .status { margin-top: 12px; color: var(--green-dark); overflow-wrap: anywhere; }
+    .status.error { color: var(--danger); }
+
+    .saved-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+    }
+
+    .saved-item:last-child { border-bottom: 0; }
+    .saved-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+    .small { font-size: .9rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 0 30px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 680px) {
+      .grid { grid-template-columns: 1fr; }
+      .header-inner { align-items: flex-start; }
+      nav { width: 100%; }
+      nav a { padding-left: 9px; padding-right: 9px; }
+      .saved-item { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="brand" href="#home">
+        <span class="brand-mark">✦</span>
+        <span>The World According To Niamh</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#home" class="active" data-page="home">Home</a>
+        <a href="#staff" data-page="staff">Staff Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="page">
+      <div class="hero">
+        <div class="eyebrow">Welcome to my little corner of the internet</div>
+        <h1>The World According To Niamh</h1>
+        <p>
+          My interests, my world, my story. A place for the things I love,
+          the things I'm passionate about, and the people who mean the most to me.
+        </p>
+      </div>
+
+      <h2 class="section-heading">A little about me</h2>
+      <p class="muted">Four interests, each with its own space.</p>
+
+      <div id="public-embeds" class="grid">
+        <article class="embed">
+          <div class="embed-icon">🎸</div>
+          <h2>Music</h2>
+          <p>I play guitar and piano, and I love singing. Music is one of the things that lets me express myself.</p>
+        </article>
+
+        <article class="embed">
+          <div class="embed-icon">🏛️</div>
+          <h2>UK Politics</h2>
+          <p>I'm interested in UK politics and getting involved in the issues that matter to me.</p>
+        </article>
+
+        <article class="embed">
+          <div class="embed-icon">🎯</div>
+          <h2>Darts</h2>
+          <p>I play darts for two teams every week. It's a hobby I'm passionate about.</p>
+        </article>
+
+        <article class="embed">
+          <div class="embed-icon">💚</div>
+          <h2>My Beautiful Wife</h2>
+          <p>Jessica is my beautiful wife and a very special part of my world.</p>
+        </article>
+      </div>
+
+      <div class="panel" style="margin-top:24px">
+        <h2>More about me</h2>
+        <p class="muted">My hobbies and more interests will be added here soon.</p>
+      </div>
+    </section>
+
+    <section id="staff" class="page" hidden>
+      <h1>Staff Area</h1>
+      <p class="muted">Sign in to manage the website's embeds.</p>
+
+      <div id="login-panel" class="panel">
+        <h2>Staff Login</h2>
+        <form id="login-form" class="stack">
+          <label>Email address
+            <input id="login-email" type="email" autocomplete="username" required>
+          </label>
+          <label>Password
+            <input id="login-password" type="password" autocomplete="current-password" required>
+          </label>
+          <div class="actions">
+            <button type="submit">Sign in</button>
+            <button type="button" class="secondary" id="reset-password">Reset password</button>
+          </div>
+        </form>
+        <p id="login-status" class="status" role="status"></p>
+      </div>
+
+      <div id="dashboard" hidden>
+        <div class="panel">
+          <h2>Dashboard</h2>
+          <p>Signed in as <strong id="signed-in-as"></strong></p>
+          <p>Role: <strong id="role-label"></strong></p>
+          <button id="sign-out" class="secondary" type="button">Sign out</button>
+        </div>
+
+        <div class="panel">
+          <h2 id="embed-heading">Create an embed</h2>
+          <form id="embed-form" class="stack">
+            <input id="embed-id" type="hidden">
+
+            <label>Embed title
+              <input id="embed-title" maxlength="120" required>
+            </label>
+
+            <label>Description
+              <textarea id="embed-description" maxlength="5000" required></textarea>
+            </label>
+
+            <label>Accent colour
+              <input id="embed-color" type="color" value="#537c5b">
+            </label>
+
+            <label>Image URL (optional)
+              <input id="embed-image" type="url" placeholder="https://example.com/image.jpg">
+            </label>
+
+            <label>Thumbnail URL (optional)
+              <input id="embed-thumbnail" type="url" placeholder="https://example.com/image.jpg">
+            </label>
+
+            <label>Links (one per line: label | https://example.com)
+              <textarea id="embed-links" placeholder="My music | https://example.com"></textarea>
+            </label>
+
+            <label>Footer (optional)
+              <input id="embed-footer" maxlength="250">
+            </label>
+
+            <div class="check">
+              <input id="embed-timestamp" type="checkbox">
+              <label for="embed-timestamp">Show last updated date</label>
+            </div>
+
+            <div class="check">
+              <input id="embed-published" type="checkbox" checked>
+              <label for="embed-published">Publish on the public website</label>
+            </div>
+
+            <div class="actions">
+              <button id="save-embed" type="submit">Save embed</button>
+              <button id="clear-editor" type="button" class="secondary">Clear form</button>
+            </div>
+          </form>
+          <p id="editor-status" class="status" role="status"></p>
+        </div>
+
+        <div class="panel">
+          <h2>Saved embeds</h2>
+          <div id="staff-embeds">Loading embeds…</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with care · The World According To Niamh · <span id="year"></span></p>
+  </footer>
+
+  <script type="module">
+    // Add Niamh's Supabase URL and publishable key in Step 3.
+    const SUPABASE_URL = "https://qjdwakxymbryawofszgm.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_t2ZV0clWAah5u2pe3Jvikw_0lyLdIka";
+
+    const $ = (id) => document.getElementById(id);
+    const siteUrl =
+      "https://marter34.github.io/the-world-according-to-niamh/";
+
+    $("year").textContent = new Date().getFullYear();
+
+    let supabase = null;
+    let currentUser = null;
+    let currentRole = null;
+
+    const configured = () =>
+      SUPABASE_URL.startsWith("https://") &&
+      !SUPABASE_URL.includes("YOUR_SUPABASE") &&
+      !SUPABASE_KEY.includes("YOUR_SUPABASE");
+
+    function status(id, message, error = false) {
+      $(id).textContent = message;
+      $(id).classList.toggle("error", error);
+    }
+
+    function showPage(name) {
+      const page = ["home", "staff"].includes(name) ? name : "home";
+      $("home").hidden = page !== "home";
+      $("staff").hidden = page !== "staff";
+
+      document.querySelectorAll("[data-page]").forEach((link) => {
+        link.classList.toggle("active", link.dataset.page === page);
+      });
+
+      if (page === "staff") refreshSession();
+    }
+
+    document.querySelectorAll("[data-page]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        history.replaceState(null, "", "#" + link.dataset.page);
+        showPage(link.dataset.page);
+      });
+    });
+
+    window.addEventListener("hashchange", () => {
+      showPage(location.hash.slice(1));
+    });
+
+    function safeUrl(value) {
+      try {
+        const url = new URL(value);
+        return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+      } catch {
+        return "";
+      }
+    }
+
+    function makeCard(embed, staff = false) {
+      const card = document.createElement("article");
+      card.className = "embed";
+      card.style.borderTopColor =
+        /^#[0-9a-f]{6}$/i.test(embed.color || "")
+          ? embed.color : "#537c5b";
+
+      const icon = document.createElement("div");
+      icon.className = "embed-icon";
+      icon.textContent = "✦";
+      card.append(icon);
+
+      const title = document.createElement("h2");
+      title.textContent = embed.title || "Untitled";
+      card.append(title);
+
+      if (embed.thumbnail_url && safeUrl(embed.thumbnail_url)) {
+        const image = document.createElement("img");
+        image.src = safeUrl(embed.thumbnail_url);
+        image.alt = "";
+        image.loading = "lazy";
+        card.append(image);
+      }
+
+      const description = document.createElement("p");
+      description.textContent = embed.description || "";
+      card.append(description);
+
+      if (embed.image_url && safeUrl(embed.image_url)) {
+        const image = document.createElement("img");
+        image.src = safeUrl(embed.image_url);
+        image.alt = "";
+        image.loading = "lazy";
+        card.append(image);
+      }
+
+      if (Array.isArray(embed.links) && embed.links.length) {
+        const links = document.createElement("div");
+        links.className = "embed-links";
+
+        embed.links.forEach((item) => {
+          const href = safeUrl(item.url || "");
+          if (!href || !item.label) return;
+
+          const a = document.createElement("a");
+          a.href = href;
+          a.textContent = item.label;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          links.append(a);
+        });
+
+        if (links.childElementCount) card.append(links);
+      }
+
+      if (embed.footer || (embed.show_timestamp && embed.updated_at)) {
+        const footer = document.createElement("div");
+        footer.className = "embed-footer";
+
+        const parts = [];
+        if (embed.footer) parts.push(embed.footer);
+        if (embed.show_timestamp && embed.updated_at) {
+          parts.push("Updated " +
+            new Date(embed.updated_at).toLocaleDateString());
+        }
+
+        footer.textContent = parts.join(" · ");
+        card.append(footer);
+      }
+
+      if (staff) {
+        const actions = document.createElement("div");
+        actions.className = "actions";
+        actions.style.marginTop = "16px";
+
+        const edit = document.createElement("button");
+        edit.type = "button";
+        edit.className = "secondary";
+        edit.textContent = "Edit";
+        edit.addEventListener("click", () => fillEditor(embed));
+        actions.append(edit);
+
+        const publish = document.createElement("button");
+        publish.type = "button";
+        publish.className = "secondary";
+        publish.textContent = embed.published ? "Unpublish" : "Publish";
+        publish.addEventListener("click", () => togglePublished(embed));
+        actions.append(publish);
+
+        if (currentRole === "admin") {
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "danger";
+          remove.textContent = "Delete";
+          remove.addEventListener("click", () => deleteEmbed(embed));
+          actions.append(remove);
+        }
+
+        card.append(actions);
+      }
+
+      return card;
+    }
+
+    const defaults = [
+      {
+        id: "default-music",
+        title: "Music",
+        description:
+          "I play guitar and piano, and I love singing. Music is one of the things that lets me express myself.",
+        color: "#537c5b"
+      },
+      {
+        id: "default-politics",
+        title: "UK Politics",
+        description:
+          "I'm interested in UK politics and getting involved in the issues that matter to me.",
+        color: "#537c5b"
+      },
+      {
+        id: "default-darts",
+        title: "Darts",
+        description:
+          "I play darts for two teams every week. It's a hobby I'm passionate about.",
+        color: "#537c5b"
+      },
+      {
+        id: "default-wife",
+        title: "My Beautiful Wife",
+        description:
+          "Jessica is my beautiful wife and a very special part of my world.",
+        color: "#537c5b"
+      }
+    ];
+
+    async function loadPublicEmbeds() {
+      if (!supabase) return;
+
+      const { data, error } = await supabase
+        .from("embeds")
+        .select("*")
+        .eq("published", true)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("Could not load public embeds:", error.message);
+        return;
+      }
+
+      const container = $("public-embeds");
+      container.replaceChildren();
+
+      const items = data && data.length ? data : defaults;
+      items.forEach((item) => container.append(makeCard(item)));
+    }
+
+    async function refreshSession() {
+      if (!configured() || !supabase) {
+        status(
+          "login-status",
+          "Supabase is not connected yet. Complete the Supabase setup first.",
+          true
+        );
+        return;
+      }
+
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error || !data.session) {
+        currentUser = null;
+        currentRole = null;
+        $("login-panel").hidden = false;
+        $("dashboard").hidden = true;
+        return;
+      }
+
+      currentUser = data.session.user;
+      await loadStaffProfile();
+    }
+
+    async function loadStaffProfile() {
+      const { data, error } = await supabase
+        .from("staff_members")
+        .select("role")
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+      if (error || !data ||
+          !["admin", "editor", "staff"].includes(data.role)) {
+        currentRole = null;
+        $("login-panel").hidden = false;
+        $("dashboard").hidden = true;
+
+        status(
+          "login-status",
+          "This account does not have staff permission. Ask the administrator for access.",
+          true
+        );
+        return;
+      }
+
+      currentRole = data.role;
+      $("login-panel").hidden = true;
+      $("dashboard").hidden = false;
+      $("signed-in-as").textContent = currentUser.email || "Staff member";
+      $("role-label").textContent = currentRole;
+      await loadStaffEmbeds();
+    }
+
+    $("login-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!supabase) return;
+
+      status("login-status", "Signing in…");
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email: $("login-email").value.trim(),
+        password: $("login-password").value
+      });
+
+      if (error) {
+        status("login-status", error.message, true);
+        return;
+      }
+
+      await refreshSession();
+    });
+
+    $("reset-password").addEventListener("click", async () => {
+      if (!supabase) return;
+
+      const email = $("login-email").value.trim();
+      if (!email) {
+        status("login-status", "Enter your email address first.", true);
+        return;
+      }
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: siteUrl
+      });
+
+      status(
+        "login-status",
+        error ? error.message :
+          "If the account exists, a password-reset email will be sent.",
+        Boolean(error)
+      );
+    });
+
+    $("sign-out").addEventListener("click", async () => {
+      if (!supabase) return;
+
+      await supabase.auth.signOut();
+      currentUser = null;
+      currentRole = null;
+      $("dashboard").hidden = true;
+      $("login-panel").hidden = false;
+      status("login-status", "You have signed out.");
+    });
+
+    function parseLinks(raw) {
+      return raw.split("\n").map((line) => {
+        const separator = line.indexOf("|");
+        if (separator < 0) return null;
+
+        const label = line.slice(0, separator).trim();
+        const url = safeUrl(line.slice(separator + 1).trim());
+
+        return label && url ? { label, url } : null;
+      }).filter(Boolean);
+    }
+
+    function fillEditor(embed) {
+      $("embed-id").value = embed.id || "";
+      $("embed-title").value = embed.title || "";
+      $("embed-description").value = embed.description || "";
+      $("embed-color").value =
+        /^#[0-9a-f]{6}$/i.test(embed.color || "")
+          ? embed.color : "#537c5b";
+      $("embed-image").value = embed.image_url || "";
+      $("embed-thumbnail").value = embed.thumbnail_url || "";
+      $("embed-links").value = (Array.isArray(embed.links) ? embed.links : [])
+        .map((item) => `${item.label} | ${item.url}`).join("\n");
+      $("embed-footer").value = embed.footer || "";
+      $("embed-timestamp").checked = Boolean(embed.show_timestamp);
+      $("embed-published").checked = Boolean(embed.published);
+      $("embed-heading").textContent = "Edit embed";
+      $("save-embed").textContent = "Update embed";
+      status("editor-status", "Editing: " + embed.title);
+    }
+
+    function clearEditor() {
+      $("embed-form").reset();
+      $("embed-id").value = "";
+      $("embed-color").value = "#537c5b";
+      $("embed-published").checked = true;
+      $("embed-heading").textContent = "Create an embed";
+      $("save-embed").textContent = "Save embed";
+      status("editor-status", "");
+    }
+
+    $("clear-editor").addEventListener("click", clearEditor);
+
+    $("embed-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!supabase || !currentUser || !currentRole) return;
+
+      const id = $("embed-id").value;
+      const image = $("embed-image").value.trim();
+      const thumbnail = $("embed-thumbnail").value.trim();
+
+      if ((image && !safeUrl(image)) ||
+          (thumbnail && !safeUrl(thumbnail))) {
+        status("editor-status", "Please enter valid HTTP or HTTPS image URLs.", true);
+        return;
+      }
+
+      const payload = {
+        title: $("embed-title").value.trim(),
+        description: $("embed-description").value.trim(),
+        color: $("embed-color").value,
+        image_url: image || null,
+        thumbnail_url: thumbnail || null,
+        links: parseLinks($("embed-links").value),
+        footer: $("embed-footer").value.trim() || null,
+        show_timestamp: $("embed-timestamp").checked,
+        published: $("embed-published").checked,
+        updated_at: new Date().toISOString()
+      };
+
+      if (!payload.title || !payload.description) {
+        status("editor-status", "A title and description are required.", true);
+        return;
+      }
+
+      $("save-embed").disabled = true;
+      status("editor-status", "Saving…");
+
+      let result;
+      if (id) {
+        result = await supabase.from("embeds").update(payload).eq("id", id);
+      } else {
+        result = await supabase.from("embeds").insert({
+          ...payload,
+          created_by: currentUser.id
+        });
+      }
+
+      $("save-embed").disabled = false;
+
+      if (result.error) {
+        status("editor-status", result.error.message, true);
+        return;
+      }
+
+      status("editor-status", "Embed saved successfully.");
+      clearEditor();
+      await loadStaffEmbeds();
+      await loadPublicEmbeds();
+    });
+
+    async function loadStaffEmbeds() {
+      const container = $("staff-embeds");
+      container.textContent = "Loading embeds…";
+
+      const { data, error } = await supabase
+        .from("embeds")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        container.textContent = "Could not load embeds: " + error.message;
+        return;
+      }
+
+      container.replaceChildren();
+      if (!data || data.length === 0) {
+        container.textContent = "No embeds have been created yet.";
+        return;
+      }
+
+      data.forEach((embed) => {
+        const row = document.createElement("div");
+        row.className = "saved-item";
+
+        const info = document.createElement("div");
+        const title = document.createElement("strong");
+        title.textContent = embed.title;
+
+        const details = document.createElement("div");
+        details.className = "muted small";
+        details.textContent = embed.published ? "Published" : "Draft";
+        info.append(title, details);
+
+        const actions = document.createElement("div");
+        actions.className = "saved-actions";
+
+        const edit = document.createElement("button");
+        edit.type = "button";
+        edit.className = "secondary";
+        edit.textContent = "Edit";
+        edit.addEventListener("click", () => fillEditor(embed));
+        actions.append(edit);
+
+        if (currentRole === "admin") {
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "danger";
+          remove.textContent = "Delete";
+          remove.addEventListener("click", () => deleteEmbed(embed));
+          actions.append(remove);
+        }
+
+        row.append(info, actions);
+        container.append(row);
+      });
+    }
+
+    async function togglePublished(embed) {
+      const { error } = await supabase.from("embeds")
+        .update({
+          published: !embed.published,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", embed.id);
+
+      if (error) {
+        status("editor-status", error.message, true);
+        return;
+      }
+
+      await loadStaffEmbeds();
+      await loadPublicEmbeds();
+    }
+
+    async function deleteEmbed(embed) {
+      if (currentRole !== "admin") return;
+      if (!confirm(`Delete "${embed.title}"? This cannot be undone.`)) return;
+
+      const { error } = await supabase.from("embeds")
+        .delete()
+        .eq("id", embed.id);
+
+      if (error) {
+        status("editor-status", error.message, true);
+        return;
+      }
+
+      status("editor-status", "Embed deleted.");
+      await loadStaffEmbeds();
+      await loadPublicEmbeds();
+    }
+
+    async function startApp() {
+      if (configured()) {
+        try {
+          const { createClient } = await import(
+            "https://esm.sh/@supabase/supabase-js@2"
+          );
+
+          supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+          supabase.auth.onAuthStateChange(() => {
+            setTimeout(() => refreshSession(), 0);
+          });
+
+          await loadPublicEmbeds();
+        } catch (error) {
+          console.error(error);
+          status(
+            "login-status",
+            "Supabase could not load. Refresh the page and try again.",
+            true
+          );
+        }
+      }
+
+      showPage(location.hash.slice(1) || "home");
+    }
+
+    startApp();
+  </script>
+</body>
+</html>
